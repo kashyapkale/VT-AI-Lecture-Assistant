@@ -1,9 +1,17 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+type LectureItem = {
+  id: number;
+  title: string;
+  description: string;
+  date: string;
+  duration: string;
+  completed: boolean;
+};
+
 const Lectures = () => {
-  // Updated lectures data to match screenshot exactly
-  const lecturesData = [
+  const lecturesData: LectureItem[] = [
     {
       id: 1,
       title: "Introduction to Data Structures",
@@ -56,13 +64,11 @@ const Lectures = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      {/* Gradient Header */}
       <div className="bg-gradient-to-r from-vt-maroon to-vt-orange text-white rounded-lg p-6">
         <h1 className="text-3xl font-bold">Course Lectures</h1>
         <p className="mt-2 opacity-90">Access lecture notes, recordings, and quizzes</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
@@ -106,7 +112,6 @@ const Lectures = () => {
         </div>
       </div>
 
-      {/* All Lectures Section */}
       <div className="bg-white rounded-lg shadow-md">
         <div className="p-6 border-b border-gray-200">
           <h2 className="text-xl font-bold text-gray-900">All Lectures</h2>
@@ -190,4 +195,4 @@ const Lectures = () => {
   );
 };
 
-export default Lectures; 
+export default Lectures;

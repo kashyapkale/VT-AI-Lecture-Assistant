@@ -9,10 +9,16 @@ import {
   AcademicCapIcon
 } from '@heroicons/react/24/outline';
 
+type RouteParams = {
+  id: string;
+};
+
+type Lecture = typeof lectures[number];
+
 const LectureNotes = () => {
-  const { id } = useParams();
+  const { id } = useParams<RouteParams>();
   const navigate = useNavigate();
-  const lecture = lectures.find(l => l.id === parseInt(id));
+  const lecture: Lecture | undefined = lectures.find((l) => l.id === parseInt(id ?? '', 10));
 
   if (!lecture) {
     return (
@@ -30,7 +36,7 @@ const LectureNotes = () => {
     );
   }
 
-  const formatDate = (dateString) => {
+  const formatDate = (dateString: string): string => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
       weekday: 'long',
@@ -40,21 +46,20 @@ const LectureNotes = () => {
     });
   };
 
-  const handlePrint = () => {
+  const handlePrint = (): void => {
     window.print();
   };
 
-  const handleCopyNotes = () => {
-    navigator.clipboard.writeText(lecture.notes);
+  const handleCopyNotes = (): void => {
+    void navigator.clipboard.writeText(lecture.notes);
+    // eslint-disable-next-line no-alert
     alert('Notes copied to clipboard!');
   };
 
-  // Simple markdown-to-HTML converter for basic formatting
-  const formatNotes = (notes) => {
+  const formatNotes = (notes: string) => {
     return notes
       .split('\n')
       .map((line, index) => {
-        // Headers
         if (line.startsWith('### ')) {
           return <h3 key={index} className="text-lg font-semibold text-gray-900 mt-6 mb-3">{line.slice(4)}</h3>;
         }
@@ -65,17 +70,14 @@ const LectureNotes = () => {
           return <h1 key={index} className="text-2xl font-bold text-gray-900 mt-8 mb-6">{line.slice(2)}</h1>;
         }
         
-        // Code blocks
         if (line.startsWith('```')) {
-          return null; // Handle in a separate pass
+          return null;
         }
         
-        // Lists
         if (line.startsWith('- ')) {
           return <li key={index} className="ml-4 mb-1">{line.slice(2)}</li>;
         }
         
-        // Bold text
         if (line.includes('**')) {
           const parts = line.split(/(\*\*.*?\*\*)/);
           return (
@@ -91,7 +93,6 @@ const LectureNotes = () => {
           );
         }
         
-        // Regular paragraphs
         if (line.trim() === '') {
           return <div key={index} className="mb-2" />;
         }
@@ -102,7 +103,6 @@ const LectureNotes = () => {
 
   return (
     <div className="max-w-4xl mx-auto">
-      {/* Header */}
       <div className="mb-8">
         <button
           onClick={() => navigate('/lectures')}
@@ -131,7 +131,6 @@ const LectureNotes = () => {
             </div>
           </div>
 
-          {/* Action Buttons */}
           <div className="flex gap-3">
             <button
               onClick={handleCopyNotes}
@@ -152,7 +151,6 @@ const LectureNotes = () => {
         </div>
       </div>
 
-      {/* Notes Content */}
       <div className="card print:shadow-none print:border-none">
         <div className="prose prose-gray max-w-none">
           <div className="space-y-2">
@@ -161,8 +159,7 @@ const LectureNotes = () => {
         </div>
       </div>
 
-      {/* Print Styles */}
-      <style jsx>{`
+      <style>{`
         @media print {
           body * {
             visibility: hidden;
@@ -186,4 +183,4 @@ const LectureNotes = () => {
   );
 };
 
-export default LectureNotes; 
+export default LectureNotes;

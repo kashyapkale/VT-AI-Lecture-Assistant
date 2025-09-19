@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ReactNode } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import {
   HomeIcon,
@@ -11,12 +11,22 @@ import {
   XMarkIcon
 } from '@heroicons/react/24/outline';
 
-const Layout = ({ children }) => {
+type LayoutProps = {
+  children?: ReactNode;
+};
+
+type NavigationItem = {
+  name: string;
+  href: string;
+  icon: React.ElementType;
+};
+
+const Layout = ({ children }: LayoutProps) => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
 
-  const navigation = [
+  const navigation: NavigationItem[] = [
     { name: 'Profile', href: '/profile', icon: UserIcon },
     { name: 'Home', href: '/', icon: HomeIcon },
     { name: 'Chat with AI', href: '/chat', icon: ChatBubbleLeftRightIcon },
@@ -25,7 +35,7 @@ const Layout = ({ children }) => {
     { name: 'FAQ', href: '/faq', icon: QuestionMarkCircleIcon },
   ];
 
-  const isActive = (path) => {
+  const isActive = (path: string): boolean => {
     if (path === '/' && location.pathname === '/') return true;
     if (path !== '/' && location.pathname.startsWith(path)) return true;
     return false;
@@ -33,7 +43,6 @@ const Layout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex">
-      {/* Mobile sidebar backdrop */}
       {isSidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
@@ -41,14 +50,12 @@ const Layout = ({ children }) => {
         />
       )}
 
-      {/* Sidebar */}
       <div
         className={`fixed inset-y-0 left-0 z-50 w-64 bg-white shadow-lg transform transition-transform duration-300 ease-in-out lg:translate-x-0 ${
           isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         <div className="flex h-full flex-col">
-          {/* Logo and Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200">
             <div className="flex items-center space-x-3">
               <div className="w-10 h-10 bg-vt-maroon rounded-lg flex items-center justify-center">
@@ -67,7 +74,6 @@ const Layout = ({ children }) => {
             </button>
           </div>
 
-          {/* Navigation */}
           <nav className="flex-1 px-4 py-6 space-y-2">
             {navigation.map((item) => {
               const Icon = item.icon;
@@ -89,7 +95,6 @@ const Layout = ({ children }) => {
             })}
           </nav>
 
-          {/* Footer */}
           <div className="p-4 border-t border-gray-200">
             <div className="text-center text-xs text-vt-gray">
               <p>Virginia Tech</p>
@@ -99,9 +104,7 @@ const Layout = ({ children }) => {
         </div>
       </div>
 
-      {/* Main content */}
       <div className="flex-1 lg:ml-64">
-        {/* Mobile header */}
         <div className="sticky top-0 z-30 flex h-16 items-center gap-x-4 border-b border-gray-200 bg-white px-4 shadow-sm lg:hidden">
           <button
             type="button"
@@ -118,7 +121,6 @@ const Layout = ({ children }) => {
           </div>
         </div>
 
-        {/* Page content */}
         <main className="py-8 px-4 sm:px-6 lg:px-8 min-h-screen">
           {children}
         </main>
@@ -127,4 +129,4 @@ const Layout = ({ children }) => {
   );
 };
 
-export default Layout; 
+export default Layout;

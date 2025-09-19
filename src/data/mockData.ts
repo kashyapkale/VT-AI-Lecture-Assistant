@@ -1,5 +1,21 @@
 // Student Profile Data
-export const studentProfile = {
+export type StudentProfile = {
+  id: string;
+  name: string;
+  email: string;
+  major: string;
+  year: string;
+  gpa: string;
+  profilePicture: string;
+  enrolledCourses: { code: string; name: string; credits: number }[];
+  stats: {
+    totalCredits: number;
+    semesterCredits: number;
+    coursesCompleted: number;
+  };
+};
+
+export const studentProfile: StudentProfile = {
   id: "123456789",
   name: "Sarah Johnson",
   email: "sarahj@vt.edu",
@@ -21,7 +37,17 @@ export const studentProfile = {
 };
 
 // Announcements Data
-export const announcements = [
+export type Announcement = {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  date: string; // ISO string
+  priority: 'high' | 'medium' | 'low';
+  course: string;
+};
+
+export const announcements: Announcement[] = [
   {
     id: 1,
     title: "Midterm Exam Schedule Updated",
@@ -52,7 +78,20 @@ export const announcements = [
 ];
 
 // Discussion Data
-export const discussions = [
+export type Discussion = {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  authorAvatar: string;
+  date: string; // ISO string
+  votes: number;
+  replies: number;
+  tags: string[];
+  course: string;
+};
+
+export const discussions: Discussion[] = [
   {
     id: 1,
     title: "Help with Assignment 3 - Dynamic Programming",
@@ -80,7 +119,14 @@ export const discussions = [
 ];
 
 // Chat Messages Data
-export const chatMessages = [
+export type ChatMessageData = {
+  id: number;
+  content: string;
+  sender: 'ai' | 'user';
+  timestamp: string;
+};
+
+export const chatMessages: ChatMessageData[] = [
   {
     id: 1,
     content: "Hello! I'm your AI Lecture Assistant. How can I help you today?",
@@ -114,7 +160,16 @@ export const chatMessages = [
 ];
 
 // Lectures Data
-export const lectures = [
+export type LectureData = {
+  id: number;
+  title: string;
+  date: string; // ISO string
+  course: string;
+  duration: string;
+  notes: string;
+};
+
+export const lectures: LectureData[] = [
   {
     id: 1,
     title: "Introduction to Data Structures",
@@ -314,7 +369,19 @@ class LinkedList {
 ];
 
 // Grades Data
-export const grades = [
+export type Grade = {
+  id: number;
+  assignment: string;
+  course: string;
+  type: 'Assignment' | 'Quiz' | 'Project' | 'Exam' | string;
+  score: number;
+  maxScore: number;
+  dueDate: string; // ISO string
+  submittedDate: string; // ISO string
+  feedback: string;
+};
+
+export const grades: Grade[] = [
   {
     id: 1,
     assignment: "Assignment 1: Basic Data Structures",
@@ -373,7 +440,14 @@ export const grades = [
 ];
 
 // FAQ Data
-export const faqData = [
+export type FAQ = {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
+};
+
+export const faqData: FAQ[] = [
   {
     id: 1,
     question: "How do I submit assignments?",
@@ -422,4 +496,4 @@ export const faqData = [
     answer: "Occasionally, extra credit opportunities may be offered, such as attending CS department seminars or completing bonus problems. These will be announced in class and are typically worth 1-2% of your final grade.",
     category: "Grading"
   }
-]; 
+];

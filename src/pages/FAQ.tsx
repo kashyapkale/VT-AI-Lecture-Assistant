@@ -1,13 +1,23 @@
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon, ChevronDownIcon } from '@heroicons/react/24/outline';
 
-const FAQ = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All Questions');
-  const [expandedItems, setExpandedItems] = useState({});
+type FAQItem = {
+  id: number;
+  question: string;
+  answer: string;
+  category: string;
+};
 
-  // FAQ data matching the screenshot
-  const faqData = [
+type Category = { name: string; icon: string; value: string };
+
+type ExpandedMap = Record<number, boolean>;
+
+const FAQ = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('All Questions');
+  const [expandedItems, setExpandedItems] = useState<ExpandedMap>({});
+
+  const faqData: FAQItem[] = [
     {
       id: 1,
       question: "How do I submit my assignments?",
@@ -70,7 +80,7 @@ const FAQ = () => {
     }
   ];
 
-  const categories = [
+  const categories: Category[] = [
     { name: "All Questions", icon: "help-circle", value: "All Questions" },
     { name: "Assignments", icon: "book", value: "assignments" },
     { name: "Grading", icon: "message-circle", value: "grading" },
@@ -80,21 +90,22 @@ const FAQ = () => {
     { name: "General", icon: "message-circle", value: "general" }
   ];
 
-  const filteredFAQs = faqData.filter(faq => {
-    const matchesSearch = faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         faq.answer.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredFAQs = faqData.filter((faq) => {
+    const matchesSearch =
+      faq.question.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      faq.answer.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = selectedCategory === 'All Questions' || faq.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
 
-  const toggleExpanded = (id) => {
-    setExpandedItems(prev => ({
+  const toggleExpanded = (id: number): void => {
+    setExpandedItems((prev) => ({
       ...prev,
       [id]: !prev[id]
     }));
   };
 
-  const getCategoryIcon = (iconName) => {
+  const getCategoryIcon = (iconName: string) => {
     switch (iconName) {
       case 'help-circle':
         return (
@@ -130,13 +141,11 @@ const FAQ = () => {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      {/* Gradient Header */}
       <div className="bg-gradient-to-r from-vt-maroon to-vt-orange text-white rounded-lg p-6">
         <h1 className="text-3xl font-bold">Frequently Asked Questions</h1>
         <p className="mt-2 opacity-90">Find quick answers to common questions about the course</p>
       </div>
 
-      {/* Search and Filter Section */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4">
           <div className="flex-1 relative">
@@ -172,7 +181,6 @@ const FAQ = () => {
         </div>
       </div>
 
-      {/* FAQ Items */}
       <div className="space-y-4">
         {filteredFAQs.map((faq) => (
           <div key={faq.id} className="bg-white rounded-lg shadow-md">
@@ -202,7 +210,6 @@ const FAQ = () => {
         ))}
       </div>
 
-      {/* Help Section */}
       <div className="bg-white rounded-lg shadow-md p-6">
         <div className="text-center">
           <svg className="mx-auto h-12 w-12 text-vt-maroon mb-4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
@@ -226,4 +233,4 @@ const FAQ = () => {
   );
 };
 
-export default FAQ; 
+export default FAQ;

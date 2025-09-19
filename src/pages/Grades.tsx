@@ -4,12 +4,23 @@ import {
   MagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
 
-const Grades = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('All');
+type Score = { points: number; total: number; percentage: number } | null;
 
-  // Updated grades data to match screenshot
-  const gradesData = [
+type GradeRow = {
+  id: number;
+  assignment: string;
+  category: 'Assignment' | 'Project' | 'Exam' | 'Quiz' | 'Lab' | string;
+  dueDate: string;
+  score: Score;
+  status: 'pending' | 'submitted' | 'graded' | string;
+  feedback: string;
+};
+
+const Grades = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedFilter, setSelectedFilter] = useState<string>('All');
+
+  const gradesData: GradeRow[] = [
     {
       id: 1,
       assignment: "Hash Table Implementation",
@@ -66,13 +77,13 @@ const Grades = () => {
     }
   ];
 
-  const filteredGrades = gradesData.filter(grade => {
+  const filteredGrades = gradesData.filter((grade) => {
     const matchesFilter = selectedFilter === 'All' || grade.category === selectedFilter;
     const matchesSearch = grade.assignment.toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
-  const getStatusIcon = (status) => {
+  const getStatusIcon = (status: GradeRow['status']) => {
     switch (status) {
       case 'pending':
         return (
@@ -101,8 +112,7 @@ const Grades = () => {
     }
   };
 
-  const getScoreColor = (score) => {
-    if (!score) return 'text-gray-400';
+  const getScoreColor = (score: Exclude<Score, null>): string => {
     if (score.percentage >= 90) return 'text-green-600';
     if (score.percentage >= 80) return 'text-blue-600';
     if (score.percentage >= 70) return 'text-yellow-600';
@@ -111,13 +121,11 @@ const Grades = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Gradient Header */}
       <div className="bg-gradient-to-r from-vt-maroon to-vt-orange text-white rounded-lg p-6">
         <h1 className="text-3xl font-bold">Grade Center</h1>
         <p className="mt-2 opacity-90">Track your academic progress and performance</p>
       </div>
 
-      {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white rounded-lg shadow-md p-6">
           <div className="flex items-center justify-between">
@@ -177,7 +185,6 @@ const Grades = () => {
         </div>
       </div>
 
-      {/* Assignment Grades Section */}
       <div className="bg-white rounded-lg shadow-md">
         <div className="p-6 border-b border-gray-200">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
@@ -292,4 +299,4 @@ const Grades = () => {
   );
 };
 
-export default Grades; 
+export default Grades;

@@ -1,8 +1,27 @@
 import React from 'react';
 
+type StudentData = {
+  name: string;
+  studentId: string;
+  major: string;
+  year: string;
+  email: string;
+  phone: string;
+  gpa: string;
+  totalCredits: number;
+  currentSemesterCredits: number;
+  completedAssignments: number;
+  dueSoon: number;
+};
+
+type Course = {
+  code: string;
+  title: string;
+  credits: number;
+};
+
 const Profile = () => {
-  // Student data matching the screenshot
-  const studentData = {
+  const studentData: StudentData = {
     name: "Sarah Johnson",
     studentId: "VT2024001",
     major: "Computer Science",
@@ -16,7 +35,7 @@ const Profile = () => {
     dueSoon: 5
   };
 
-  const currentCourses = [
+  const currentCourses: Course[] = [
     {
       code: "CS 3114",
       title: "Data Structures & Algorithms",
@@ -41,23 +60,18 @@ const Profile = () => {
 
   return (
     <div className="max-w-6xl mx-auto space-y-6">
-      {/* Gradient Header */}
       <div className="bg-gradient-to-r from-vt-maroon to-vt-orange text-white rounded-lg p-6">
         <h1 className="text-3xl font-bold">Student Profile</h1>
         <p className="mt-2 opacity-90">Your academic information and progress</p>
       </div>
 
-      {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Profile Information - Left Column */}
         <div className="lg:col-span-2 bg-white rounded-lg shadow-md p-6">
           <div className="flex items-start space-x-6">
-            {/* Profile Picture */}
             <div className="w-24 h-24 bg-gray-300 rounded-full flex items-center justify-center">
               <span className="text-2xl font-bold text-gray-600">SJ</span>
             </div>
             
-            {/* Student Info */}
             <div className="flex-1">
               <h2 className="text-2xl font-bold text-gray-900 mb-2">{studentData.name}</h2>
               <p className="text-lg text-gray-600 mb-1">Student ID: {studentData.studentId}</p>
@@ -80,7 +94,6 @@ const Profile = () => {
               </div>
             </div>
             
-            {/* GPA Badge */}
             <div className="text-right">
               <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold">
                 GPA: {studentData.gpa}
@@ -89,7 +102,6 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* Stats Cards - Right Column */}
         <div className="space-y-4">
           <div className="bg-white rounded-lg shadow-md p-4">
             <div className="flex items-center justify-between">
@@ -147,7 +159,6 @@ const Profile = () => {
         </div>
       </div>
 
-      {/* Current Courses Section */}
       <div className="bg-white rounded-lg shadow-md">
         <div className="p-6 border-b border-gray-200">
           <h3 className="text-xl font-bold text-gray-900">Current Courses</h3>
@@ -175,4 +186,4 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;

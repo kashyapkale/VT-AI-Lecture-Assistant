@@ -1,19 +1,40 @@
 import React, { useState } from 'react';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 
-const Home = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
+type Announcement = {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  time: string;
+  priority: 'high' | 'medium' | 'low' | string;
+  isPinned?: boolean;
+};
 
-  // Announcements data matching the screenshot
-  const announcements = [
+type Discussion = {
+  id: number;
+  title: string;
+  content: string;
+  author: string;
+  time: string;
+  replies: number;
+  upvotes: number;
+  downvotes: number;
+  tags: string[];
+};
+
+const Home = () => {
+  const [searchTerm, setSearchTerm] = useState<string>('');
+  const [selectedFilter, setSelectedFilter] = useState<string>('all');
+
+  const announcements: Announcement[] = [
     {
       id: 1,
       title: "Midterm Exam Schedule Updated",
       content: "The midterm exam for CS 3114 has been moved to March 15th. Please make note of this change and prepare accordingly.",
       author: "Dr. Smith",
       time: "2 hours ago",
-      priority: "high", // red border
+      priority: "high",
       isPinned: true
     },
     {
@@ -22,7 +43,7 @@ const Home = () => {
       content: "I will be extending office hours this week due to the upcoming assignment deadline. Available Monday-Wednesday 2-5 PM.",
       author: "Prof. Johnson",
       time: "1 day ago",
-      priority: "medium" // yellow border
+      priority: "medium"
     },
     {
       id: 3,
@@ -30,12 +51,11 @@ const Home = () => {
       content: "Don't miss tomorrow's guest lecture on Machine Learning Applications in Industry by Dr. Chen from Google.",
       author: "Dr. Wilson",
       time: "2 days ago",
-      priority: "low" // blue border
+      priority: "low"
     }
   ];
 
-  // Discussions data matching the screenshot
-  const discussions = [
+  const discussions: Discussion[] = [
     {
       id: 1,
       title: "Help with Assignment 3 - Dynamic Programming",
@@ -71,7 +91,7 @@ const Home = () => {
     }
   ];
 
-  const getPriorityBorderColor = (priority) => {
+  const getPriorityBorderColor = (priority: Announcement['priority']): string => {
     switch (priority) {
       case 'high': return 'border-l-red-500 bg-red-50';
       case 'medium': return 'border-l-yellow-500 bg-yellow-50';
@@ -82,15 +102,12 @@ const Home = () => {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Gradient Header */}
       <div className="bg-gradient-to-r from-vt-maroon to-vt-orange text-white rounded-lg p-6">
         <h1 className="text-3xl font-bold">Course Dashboard</h1>
         <p className="mt-2 opacity-90">Stay updated with announcements and join discussions</p>
       </div>
 
-      {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Announcements Section */}
         <div className="bg-white rounded-lg shadow-md">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between">
@@ -136,7 +153,6 @@ const Home = () => {
           </div>
         </div>
 
-        {/* Discussions Section */}
         <div className="bg-white rounded-lg shadow-md">
           <div className="p-6 border-b border-gray-200">
             <div className="flex items-center justify-between mb-4">
@@ -243,4 +259,4 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;

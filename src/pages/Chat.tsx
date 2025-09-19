@@ -1,15 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { PaperAirplaneIcon, MicrophoneIcon } from '@heroicons/react/24/outline';
 
-const Chat = () => {
-  const [messages, setMessages] = useState([]);
-  const [inputValue, setInputValue] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [showFullChat, setShowFullChat] = useState(false);
-  const messagesEndRef = useRef(null);
-  const inputRef = useRef(null);
+type ChatMessage = {
+  id: number;
+  text: string;
+  isUser: boolean;
+  timestamp: string;
+};
 
-  const scrollToBottom = () => {
+const Chat = () => {
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [inputValue, setInputValue] = useState<string>('');
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [showFullChat, setShowFullChat] = useState<boolean>(false);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
+  const scrollToBottom = (): void => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -17,18 +24,12 @@ const Chat = () => {
     scrollToBottom();
   }, [messages]);
 
-  // Simulate AI response with typing effect
-  const simulateAIResponse = (userMessage) => {
+  const simulateAIResponse = (userMessage: string): void => {
     setIsLoading(true);
-    
-    // Simulate thinking time
     setTimeout(() => {
       setIsLoading(false);
-      
-      // Generate contextual response based on user message
       let aiResponse = "";
       const lowerMessage = userMessage.toLowerCase();
-      
       if (lowerMessage.includes('assignment') || lowerMessage.includes('homework')) {
         aiResponse = "I'd be happy to help you with your assignment! Could you please provide more details about the specific topic or problem you're working on? For CS 3114, I can assist with data structures, algorithms, complexity analysis, and implementation strategies.";
       } else if (lowerMessage.includes('data structure') || lowerMessage.includes('algorithm')) {
@@ -41,42 +42,38 @@ const Chat = () => {
         aiResponse = "Hello! I'm your AI Learning Assistant for CS 3114. I'm here to help you with data structures, algorithms, assignments, exam preparation, and any course-related questions you might have. How can I assist you today?";
       }
 
-      const aiMessage = {
+      const aiMessage: ChatMessage = {
         id: Date.now(),
         text: aiResponse,
         isUser: false,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
       };
 
-      setMessages(prev => [...prev, aiMessage]);
+      setMessages((prev) => [...prev, aiMessage]);
     }, 1500);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
     if (!inputValue.trim()) return;
-
-    // If this is the first message, show the full chat interface
     if (messages.length === 0) {
       setShowFullChat(true);
     }
-
-    const userMessage = {
+    const userMessage: ChatMessage = {
       id: Date.now(),
       text: inputValue.trim(),
       isUser: true,
       timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
     };
-
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     simulateAIResponse(inputValue.trim());
     setInputValue('');
   };
 
-  const handleKeyPress = (e) => {
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement | HTMLInputElement>): void => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e);
+      handleSubmit(e as unknown as React.FormEvent);
     }
   };
 
@@ -87,12 +84,10 @@ const Chat = () => {
     { icon: "🧮", text: "Analyze complexity", description: "Calculate time & space complexity" }
   ];
 
-  // Landing page view (before first message)
   if (!showFullChat) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 flex flex-col items-center justify-center p-6">
         <div className="max-w-4xl w-full text-center">
-          {/* Header */}
           <div className="mb-12">
             <h1 className="text-5xl font-bold text-gray-900 mb-4">
               AI Learning Assistant
@@ -104,7 +99,6 @@ const Chat = () => {
             </p>
           </div>
 
-          {/* Main input */}
           <div className="mb-8">
             <form onSubmit={handleSubmit} className="relative max-w-2xl mx-auto">
               <div className="relative bg-white rounded-full shadow-lg border border-gray-200 hover:shadow-xl transition-all duration-300">
@@ -149,7 +143,6 @@ const Chat = () => {
             </form>
           </div>
 
-          {/* Quick action buttons */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-4xl mx-auto">
             {quickPrompts.map((prompt, index) => (
               <button
@@ -175,10 +168,8 @@ const Chat = () => {
     );
   }
 
-  // Full chat interface (after first message)
   return (
     <div className="h-screen flex flex-col bg-gradient-to-br from-gray-50 to-gray-100 animate-fadeIn">
-      {/* Chat Header */}
       <div className="bg-white/80 backdrop-blur-sm border-b border-gray-200/50 px-6 py-4 shadow-sm">
         <div className="flex items-center justify-between max-w-6xl mx-auto">
           <div className="flex items-center space-x-4">
@@ -204,7 +195,6 @@ const Chat = () => {
         </div>
       </div>
 
-      {/* Messages Area */}
       <div className="flex-1 overflow-y-auto px-6 py-8">
         <div className="max-w-5xl mx-auto space-y-8">
           {messages.map((message) => (
@@ -213,7 +203,6 @@ const Chat = () => {
               className={`flex ${message.isUser ? 'justify-end' : 'justify-start'} animate-slideIn`}
             >
               <div className={`flex items-start space-x-4 max-w-4xl ${message.isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
-                {/* Avatar */}
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center shadow-md ${
                   message.isUser 
                     ? 'bg-gradient-to-r from-vt-maroon to-red-700 text-white' 
@@ -231,7 +220,6 @@ const Chat = () => {
                   )}
                 </div>
                 
-                {/* Message Content */}
                 <div className={`flex flex-col ${message.isUser ? 'items-end' : 'items-start'}`}>
                   <div className={`px-6 py-4 rounded-2xl max-w-full shadow-md hover:shadow-lg transition-all duration-200 ${
                     message.isUser 
@@ -256,7 +244,6 @@ const Chat = () => {
             </div>
           ))}
           
-          {/* Loading indicator */}
           {isLoading && (
             <div className="flex justify-start animate-slideIn">
               <div className="flex items-start space-x-4 max-w-4xl">
@@ -283,7 +270,6 @@ const Chat = () => {
         </div>
       </div>
 
-      {/* Input Area */}
       <div className="bg-white/80 backdrop-blur-sm border-t border-gray-200/50 px-6 py-6 shadow-lg">
         <div className="max-w-5xl mx-auto">
           <form onSubmit={handleSubmit} className="relative">
@@ -294,7 +280,7 @@ const Chat = () => {
                 onKeyPress={handleKeyPress}
                 placeholder="Ask me anything about data structures, algorithms, or your assignments..."
                 className="w-full px-6 py-4 pr-16 bg-transparent rounded-3xl resize-none focus:outline-none leading-relaxed max-h-40"
-                rows="1"
+                rows={1}
                 style={{ minHeight: '56px' }}
               />
               <div className="absolute right-3 top-1/2 transform -translate-y-1/2 flex items-center space-x-2">
@@ -328,4 +314,4 @@ const Chat = () => {
   );
 };
 
-export default Chat; 
+export default Chat;
